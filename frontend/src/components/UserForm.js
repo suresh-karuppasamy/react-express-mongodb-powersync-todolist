@@ -95,7 +95,7 @@ const UserForm = ({ user, onSave, onCancel, syncEnabled = true }) => {
       
       <div className="sync-status-indicator">
         <span className={`sync-badge ${syncEnabled ? 'sync-on' : 'sync-off'}`}>
-          {syncEnabled ? '🔄 PowerSync ON - Will sync to MongoDB' : '💾 PowerSync OFF - Local storage only'}
+          {syncEnabled ? '🔄 Sync ON - Will sync to MongoDB' : '💾 Sync OFF - Local storage only'}
         </span>
       </div>
       

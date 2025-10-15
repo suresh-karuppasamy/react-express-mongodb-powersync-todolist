@@ -75,7 +75,7 @@ const SyncToggle = ({ onSyncToggle, syncEnabled }) => {
           />
           <span className="toggle-slider"></span>
           <span className="toggle-label">
-            {syncEnabled ? 'PowerSync ON' : 'PowerSync OFF'}
+            {syncEnabled ? 'Sync ON' : 'Sync OFF'}
           </span>
         </label>
         
@@ -93,15 +93,15 @@ const SyncToggle = ({ onSyncToggle, syncEnabled }) => {
       <div className="sync-info">
         {!isConnected ? (
           <span className="offline-message">
-            🔌 Working offline - PowerSync will sync when online
+            🔌 Working offline - Sync will happen when online
           </span>
         ) : syncEnabled ? (
           <span className="sync-message">
-            ⚡ PowerSync enabled - Real-time sync with MongoDB active
+            ⚡ Sync enabled - Real-time sync with MongoDB active
           </span>
         ) : (
           <span className="no-sync-message">
-            ⏸️ PowerSync disabled - Working with local storage only
+            ⏸️ Sync disabled - Working with local storage only
           </span>
         )}
       </div>

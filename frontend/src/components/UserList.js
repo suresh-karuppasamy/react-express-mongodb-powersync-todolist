@@ -73,7 +73,7 @@ const UserList = ({ onEditUser, onDeleteUser, syncEnabled = true }) => {
         <h2>Users List</h2>
         <div className="sync-info">
           <span className={`sync-badge ${syncEnabled ? 'sync-on' : 'sync-off'}`}>
-            {syncEnabled ? '🔄 PowerSync ON' : '💾 PowerSync OFF'}
+            {syncEnabled ? '🔄 Sync ON' : '💾 Sync OFF'}
           </span>
           {syncStatus && (
             <span className="user-count">

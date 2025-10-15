@@ -1,5 +1,5 @@
-// IndexedDB implementation for local storage when PowerSync is off
-// MongoDB sync when PowerSync is on
+// IndexedDB implementation for local storage
+// MongoDB sync when sync is enabled
 
 let db = null;
 let dbInitialized = false;
@@ -8,7 +8,7 @@ const DB_VERSION = 1;
 const STORE_NAME = 'users';
 
 // Initialize IndexedDB
-export const initializePowerSync = async () => {
+export const initializeDatabase = async () => {
   try {
     console.log('Initializing local storage database...');
     
@@ -49,7 +49,7 @@ export const initializePowerSync = async () => {
 // Check if database is initialized
 const ensureDatabaseInitialized = () => {
   if (!dbInitialized || !db) {
-    throw new Error('Database not initialized. Please call initializePowerSync() first.');
+    throw new Error('Database not initialized. Please call initializeDatabase() first.');
   }
 };
 
@@ -68,8 +68,8 @@ const dbOperation = (operation) => {
   });
 };
 
-// PowerSync helper functions for local operations
-export const powerSyncHelpers = {
+// Database helper functions for local operations
+export const databaseHelpers = {
   // Insert a new user
   async insertUser(userData) {
     try {
@@ -186,8 +186,8 @@ export const powerSyncHelpers = {
       
       // Add all users from MongoDB
       for (const user of users) {
-        // Use powersync_id if available, otherwise use _id
-        const localId = user.powersync_id || user._id;
+        // Use sync_id if available, otherwise use _id
+        const localId = user.sync_id || user._id;
         
         const localUser = {
           id: localId,

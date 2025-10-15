@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { powerSyncHelpers } from '../powersync/database';
+import { databaseHelpers } from '../database/database';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -13,30 +13,30 @@ const api = axios.create({
 // Check if we're online
 const isOnline = () => navigator.onLine;
 
-// User API functions with PowerSync integration
+// User API functions with sync integration
 export const userAPI = {
   // Get all users (from local storage or MongoDB based on sync status)
   getUsers: async (syncEnabled = true) => {
     try {
       if (syncEnabled && isOnline()) {
-        // PowerSync ON: Get from MongoDB and sync to local storage
+        // Sync ON: Get from MongoDB and sync to local storage
         try {
           const response = await api.get('/users');
           const mongoUsers = response.data;
           
           // Sync MongoDB data to local storage
-          await powerSyncHelpers.syncFromMongoDB(mongoUsers);
+          await databaseHelpers.syncFromMongoDB(mongoUsers);
           
-          console.log('PowerSync ON: Retrieved users from MongoDB and synced to local storage');
+          console.log('Sync ON: Retrieved users from MongoDB and synced to local storage');
           return mongoUsers;
         } catch (error) {
-          console.log('PowerSync ON: MongoDB unavailable, using local storage');
-          return await powerSyncHelpers.getAllUsers();
+          console.log('Sync ON: MongoDB unavailable, using local storage');
+          return await databaseHelpers.getAllUsers();
         }
       } else {
-        // PowerSync OFF: Get from local storage only
-        console.log('PowerSync OFF: Using local storage only');
-        return await powerSyncHelpers.getAllUsers();
+        // Sync OFF: Get from local storage only
+        console.log('Sync OFF: Using local storage only');
+        return await databaseHelpers.getAllUsers();
       }
     } catch (error) {
       console.error('Error getting users:', error);
@@ -52,11 +52,11 @@ export const userAPI = {
           const response = await api.get(`/users/${id}`);
           return response.data;
         } catch (error) {
-          console.log('PowerSync ON: MongoDB unavailable, using local storage');
-          return await powerSyncHelpers.getUserById(id);
+          console.log('Sync ON: MongoDB unavailable, using local storage');
+          return await databaseHelpers.getUserById(id);
         }
       } else {
-        return await powerSyncHelpers.getUserById(id);
+        return await databaseHelpers.getUserById(id);
       }
     } catch (error) {
       console.error('Error getting user:', error);
@@ -68,21 +68,21 @@ export const userAPI = {
   createUser: async (userData, syncEnabled = true) => {
     try {
       // Always save to local storage first
-      const localUser = await powerSyncHelpers.insertUser(userData);
+      const localUser = await databaseHelpers.insertUser(userData);
       
       if (syncEnabled && isOnline()) {
-        // PowerSync ON: Also save to MongoDB
+        // Sync ON: Also save to MongoDB
         try {
           const response = await api.post('/users', userData);
-          console.log('PowerSync ON: User created in MongoDB and local storage');
+          console.log('Sync ON: User created in MongoDB and local storage');
           return response.data;
         } catch (error) {
-          console.log('PowerSync ON: MongoDB unavailable, saved locally only');
+          console.log('Sync ON: MongoDB unavailable, saved locally only');
           return localUser;
         }
       } else {
-        // PowerSync OFF: Save to local storage only
-        console.log('PowerSync OFF: User saved to local storage only');
+        // Sync OFF: Save to local storage only
+        console.log('Sync OFF: User saved to local storage only');
         return localUser;
       }
     } catch (error) {
@@ -95,21 +95,21 @@ export const userAPI = {
   updateUser: async (id, userData, syncEnabled = true) => {
     try {
       // Always update local storage first
-      const localUser = await powerSyncHelpers.updateUser(id, userData);
+      const localUser = await databaseHelpers.updateUser(id, userData);
       
       if (syncEnabled && isOnline()) {
-        // PowerSync ON: Also update MongoDB
+        // Sync ON: Also update MongoDB
         try {
           const response = await api.put(`/users/${id}`, userData);
-          console.log('PowerSync ON: User updated in MongoDB and local storage');
+          console.log('Sync ON: User updated in MongoDB and local storage');
           return response.data;
         } catch (error) {
-          console.log('PowerSync ON: MongoDB unavailable, updated locally only');
+          console.log('Sync ON: MongoDB unavailable, updated locally only');
           return localUser;
         }
       } else {
-        // PowerSync OFF: Update local storage only
-        console.log('PowerSync OFF: User updated in local storage only');
+        // Sync OFF: Update local storage only
+        console.log('Sync OFF: User updated in local storage only');
         return localUser;
       }
     } catch (error) {
@@ -122,21 +122,21 @@ export const userAPI = {
   deleteUser: async (id, syncEnabled = true) => {
     try {
       // Always delete from local storage first
-      await powerSyncHelpers.deleteUser(id);
+      await databaseHelpers.deleteUser(id);
       
       if (syncEnabled && isOnline()) {
-        // PowerSync ON: Also delete from MongoDB
+        // Sync ON: Also delete from MongoDB
         try {
           const response = await api.delete(`/users/${id}`);
-          console.log('PowerSync ON: User deleted from MongoDB and local storage');
+          console.log('Sync ON: User deleted from MongoDB and local storage');
           return response.data;
         } catch (error) {
-          console.log('PowerSync ON: MongoDB unavailable, deleted locally only');
+          console.log('Sync ON: MongoDB unavailable, deleted locally only');
           return { message: 'User deleted from local storage only' };
         }
       } else {
-        // PowerSync OFF: Delete from local storage only
-        console.log('PowerSync OFF: User deleted from local storage only');
+        // Sync OFF: Delete from local storage only
+        console.log('Sync OFF: User deleted from local storage only');
         return { message: 'User deleted from local storage only' };
       }
     } catch (error) {
@@ -159,20 +159,20 @@ export const userAPI = {
       const mongoUsers = mongoResponse.data;
       
       // Filter out users that have custom powersync_id (not MongoDB ObjectIds)
-      const customPowerSyncIds = mongoUsers
+      const customSyncIds = mongoUsers
         .map(user => user.powersync_id)
         .filter(id => id && id.startsWith('user_')) // Only custom IDs start with 'user_'
         .filter(Boolean);
       
-      const existingPowerSyncIds = new Set(customPowerSyncIds);
+      const existingSyncIds = new Set(customSyncIds);
       
       // Get local users
-      const localUsers = await powerSyncHelpers.getAllUsers();
+      const localUsers = await databaseHelpers.getAllUsers();
       console.log('Local users to sync:', localUsers.length);
       
       // Filter out users that already exist in MongoDB
       const newLocalUsers = localUsers.filter(localUser => 
-        !existingPowerSyncIds.has(localUser.id)
+        !existingSyncIds.has(localUser.id)
       );
       
       console.log(`Found ${newLocalUsers.length} new local users to sync (out of ${localUsers.length} total)`);
@@ -193,7 +193,7 @@ export const userAPI = {
       const updatedMongoUsers = updatedMongoResponse.data;
       
       // Sync MongoDB data to local storage
-      await powerSyncHelpers.syncFromMongoDB(updatedMongoUsers);
+      await databaseHelpers.syncFromMongoDB(updatedMongoUsers);
       
       console.log('Manual sync completed:', updatedMongoUsers.length, 'users synced');
       return { 
@@ -207,7 +207,7 @@ export const userAPI = {
     }
   },
 
-  // Sync local data to MongoDB (when PowerSync is turned on)
+  // Sync local data to MongoDB (when Sync is turned on)
   syncLocalToMongoDB: async () => {
     if (!isOnline()) {
       throw new Error('Cannot sync: You are offline');
@@ -221,18 +221,18 @@ export const userAPI = {
       const mongoUsers = mongoResponse.data;
       
       // Filter out users that have custom powersync_id (not MongoDB ObjectIds)
-      const customPowerSyncIds = mongoUsers
+      const customSyncIds = mongoUsers
         .map(user => user.powersync_id)
         .filter(id => id && id.startsWith('user_')) // Only custom IDs start with 'user_'
         .filter(Boolean);
       
-      const existingPowerSyncIds = new Set(customPowerSyncIds);
+      const existingSyncIds = new Set(customSyncIds);
       
-      console.log('Existing MongoDB users with custom powersync_id:', existingPowerSyncIds.size);
-      console.log('Custom powersync_ids:', Array.from(existingPowerSyncIds));
+      console.log('Existing MongoDB users with custom powersync_id:', existingSyncIds.size);
+      console.log('Custom powersync_ids:', Array.from(existingSyncIds));
       
       // Get all local users
-      const localUsers = await powerSyncHelpers.getAllUsers();
+      const localUsers = await databaseHelpers.getAllUsers();
       
       if (localUsers.length === 0) {
         console.log('No local users to sync');
@@ -241,12 +241,12 @@ export const userAPI = {
       
       // Filter out users that already exist in MongoDB
       const newLocalUsers = localUsers.filter(localUser => 
-        !existingPowerSyncIds.has(localUser.id)
+        !existingSyncIds.has(localUser.id)
       );
       
       console.log(`Found ${newLocalUsers.length} new local users to sync (out of ${localUsers.length} total)`);
       console.log('Local user IDs:', localUsers.map(u => u.id));
-      console.log('Existing MongoDB powersync_ids:', Array.from(existingPowerSyncIds));
+      console.log('Existing MongoDB powersync_ids:', Array.from(existingSyncIds));
       console.log('New local users to sync:', newLocalUsers.map(u => ({id: u.id, name: u.name})));
       
       if (newLocalUsers.length === 0) {
@@ -276,7 +276,7 @@ export const userAPI = {
   // Get sync status
   getSyncStatus: async () => {
     try {
-      const localStatus = await powerSyncHelpers.getSyncStatus();
+      const localStatus = await databaseHelpers.getSyncStatus();
       
       if (isOnline()) {
         try {
@@ -288,15 +288,15 @@ export const userAPI = {
           const mongoUsers = mongoResponse.data;
           
           // Filter out users that have custom powersync_id (not MongoDB ObjectIds)
-          const customPowerSyncIds = mongoUsers
+          const customSyncIds = mongoUsers
             .map(user => user.powersync_id)
             .filter(id => id && id.startsWith('user_')) // Only custom IDs start with 'user_'
             .filter(Boolean);
           
-          const existingPowerSyncIds = new Set(customPowerSyncIds);
-          const localUsers = await powerSyncHelpers.getAllUsers();
+          const existingSyncIds = new Set(customSyncIds);
+          const localUsers = await databaseHelpers.getAllUsers();
           const newLocalUsers = localUsers.filter(localUser => 
-            !existingPowerSyncIds.has(localUser.id)
+            !existingSyncIds.has(localUser.id)
           );
           
           return {
@@ -308,7 +308,7 @@ export const userAPI = {
               localUsers: localUsers.length,
               mongoUsers: mongoUsers.length,
               newLocalUsers: newLocalUsers.length,
-              existingInMongo: existingPowerSyncIds.size
+              existingInMongo: existingSyncIds.size
             }
           };
         } catch (error) {

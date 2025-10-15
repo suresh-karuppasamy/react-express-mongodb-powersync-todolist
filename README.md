@@ -1,23 +1,24 @@
-# React Express MongoDB PowerSync TodoList
+# React Express MongoDB IndexedDB TodoList
 
-A full-stack todo list application with offline-first capabilities using PowerSync technology. This application demonstrates how to build a modern web app with React frontend, Express backend, MongoDB database, and PowerSync for seamless offline/online synchronization.
+A full-stack todo list application with offline-first capabilities using IndexedDB for local storage. This application demonstrates how to build a modern web app with React frontend, Express backend, MongoDB database, and custom sync logic for seamless offline/online synchronization.
 
 ## 🚀 Features
 
 - **Offline-First**: Works completely offline with local IndexedDB storage
-- **PowerSync Integration**: Seamless synchronization between local and remote data
-- **Real-time Sync**: Automatic data synchronization when online
+- **Custom Sync Logic**: Seamless synchronization between local and remote data
+- **Smart Sync**: Automatic data synchronization when online with duplicate prevention
 - **User Management**: Create, read, update, and delete users
 - **Modern UI**: Beautiful, responsive React interface
 - **RESTful API**: Express.js backend with MongoDB integration
 - **Duplicate Prevention**: Smart sync logic prevents data duplicates
+- **Toggle Sync**: Turn sync on/off to work offline or online
 
 ## 🏗️ Architecture
 
 ```
 Frontend (React)          Backend (Express)           Database (MongoDB)
 ┌─────────────────┐       ┌─────────────────┐         ┌─────────────────┐
-│  PowerSync      │◄────►│  REST API       │◄───────►│  User Data      │
+│  Custom Sync    │◄────►│  REST API       │◄───────►│  User Data      │
 │  IndexedDB      │       │  Port 5000      │         │  Port 27017     │
 │  Port 3000      │       │                 │         │                 │
 └─────────────────┘       └─────────────────┘         └─────────────────┘
@@ -151,24 +152,50 @@ npm start
 
 ## 📱 Usage Guide
 
-### PowerSync Features
+### Sync Features
 
-1. **PowerSync ON**: 
-   - Data syncs automatically between local storage and MongoDB
+1. **Sync ON**: 
+   - Data syncs automatically between local IndexedDB and MongoDB
    - Real-time updates when online
    - Automatic sync when coming back online
+   - Smart duplicate prevention
 
-2. **PowerSync OFF**: 
+2. **Sync OFF**: 
    - Works completely offline
    - Data stored locally in IndexedDB
    - Manual sync available when needed
+   - No network dependency
 
 ### User Management
 
 1. **Create User**: Click "Create New User" button
 2. **Edit User**: Click "Edit" button on any user card
 3. **Delete User**: Click "Delete" button on any user card
-4. **Sync Status**: View sync statistics in the PowerSync panel
+4. **Sync Status**: View sync statistics in the Sync panel
+
+## 💾 Local Storage (IndexedDB)
+
+The application uses **IndexedDB** for offline storage:
+
+- **Database Name**: `UserManagementDB`
+- **Store Name**: `users`
+- **Key Path**: `id` (custom generated IDs)
+- **Indexes**: `name`, `age`, `createdAt`
+- **Features**: Automatic schema creation, data persistence, offline-first
+
+### IndexedDB Structure
+```javascript
+// User object structure in IndexedDB
+{
+  id: "user_1234567890_abcdef",     // Custom generated ID
+  _id: "user_1234567890_abcdef",    // Same as id for compatibility
+  name: "John Doe",                 // User name
+  age: 25,                          // User age
+  createdAt: "2024-01-01T00:00:00.000Z",  // Creation timestamp
+  updatedAt: "2024-01-01T00:00:00.000Z",  // Update timestamp
+  _deleted: false                   // Soft delete flag
+}
+```
 
 ## 🔧 API Endpoints
 
@@ -251,14 +278,14 @@ sudo journalctl -u mongod -f
 ### Manual Testing
 
 1. **Offline Testing**:
-   - Turn off PowerSync
-   - Add users (should work offline)
-   - Turn on PowerSync
+   - Turn off Sync toggle
+   - Add users (should work offline with IndexedDB)
+   - Turn on Sync toggle
    - Verify users sync to MongoDB
 
 2. **Sync Testing**:
-   - Add users with PowerSync OFF
-   - Turn PowerSync ON
+   - Add users with Sync OFF
+   - Turn Sync ON
    - Check that users appear in MongoDB
    - Verify no duplicates are created
 
@@ -266,6 +293,11 @@ sudo journalctl -u mongod -f
    - Add same user multiple times
    - Run cleanup endpoint
    - Verify duplicates are removed
+
+4. **IndexedDB Testing**:
+   - Open browser DevTools → Application → IndexedDB
+   - Verify data is stored in "UserManagementDB"
+   - Check data persistence across page refreshes
 
 ### API Testing
 
@@ -295,7 +327,7 @@ react-express-mongodb-powersync-todolist/
 │   ├── public/             # Static files
 │   ├── src/                # React source code
 │   │   ├── components/     # React components
-│   │   ├── powersync/      # PowerSync database logic
+│   │   ├── database/       # IndexedDB database logic
 │   │   ├── services/       # API services
 │   │   └── App.js          # Main App component
 │   └── package.json        # Frontend dependencies

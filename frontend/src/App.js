@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import UserList from './components/UserList';
 import UserForm from './components/UserForm';
 import SyncToggle from './components/SyncToggle';
-import { initializePowerSync } from './powersync/database';
+import { initializeDatabase } from './database/database';
 import { userAPI } from './services/api';
 import './App.css';
 
@@ -14,10 +14,10 @@ function App() {
   const [dbInitialized, setDbInitialized] = useState(false);
 
   useEffect(() => {
-    // Initialize PowerSync connection
+    // Initialize database connection
     const initDB = async () => {
       try {
-        await initializePowerSync();
+        await initializeDatabase();
         setDbInitialized(true);
         console.log('Database initialization completed');
       } catch (error) {
@@ -59,10 +59,10 @@ function App() {
     const newSyncEnabled = !syncEnabled;
     setSyncEnabled(newSyncEnabled);
     
-    // If turning PowerSync ON, sync local data to MongoDB first
+    // If turning sync ON, sync local data to MongoDB first
     if (newSyncEnabled) {
       try {
-        console.log('PowerSync enabled: Syncing local data to MongoDB...');
+        console.log('Sync enabled: Syncing local data to MongoDB...');
         const syncResult = await userAPI.syncLocalToMongoDB();
         console.log('Local to MongoDB sync completed:', syncResult);
         
@@ -79,7 +79,7 @@ function App() {
     }
     
     setRefreshKey(prev => prev + 1); // Trigger refresh when sync status changes
-    console.log('PowerSync toggled:', newSyncEnabled);
+    console.log('Sync toggled:', newSyncEnabled);
   };
 
   // Show loading state while database initializes
@@ -88,7 +88,7 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>User Management System</h1>
-          <p>Initializing PowerSync database...</p>
+          <p>Initializing database...</p>
         </header>
         <main className="App-main">
           <div className="loading-container">
@@ -103,7 +103,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>User Management System</h1>
-        <p>Create, edit, and manage users with PowerSync offline capabilities</p>
+        <p>Create, edit, and manage users with offline capabilities</p>
       </header>
 
       <main className="App-main">
@@ -140,8 +140,8 @@ function App() {
       </main>
 
       <footer className="App-footer">
-        <p>Built with React, Express, MongoDB, and PowerSync</p>
-        <p>PowerSync Status: {syncEnabled ? 'Enabled' : 'Disabled'}</p>
+        <p>Built with React, Express, MongoDB, and IndexedDB</p>
+        <p>Sync Status: {syncEnabled ? 'Enabled' : 'Disabled'}</p>
       </footer>
     </div>
   );

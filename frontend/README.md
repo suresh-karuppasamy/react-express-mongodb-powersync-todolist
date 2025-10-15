@@ -1,6 +1,6 @@
-# User Management with PowerSync
+# User Management with IndexedDB
 
-A React application for managing users with name and age fields, featuring **PowerSync** for offline-first functionality and real-time synchronization.
+A React application for managing users with name and age fields, featuring **IndexedDB** for offline-first functionality and custom sync logic for real-time synchronization.
 
 ## Features
 
@@ -10,31 +10,31 @@ A React application for managing users with name and age fields, featuring **Pow
 - ✅ **Delete User**: Remove users with confirmation
 - ✅ **Form Validation**: Client-side validation for name and age
 - ✅ **Responsive Design**: Works on desktop and mobile
-- ✅ **PowerSync Integration**: Offline-first with real-time sync
-- ✅ **Sync Toggle**: Turn PowerSync on/off for testing
+- ✅ **IndexedDB Integration**: Offline-first with real-time sync
+- ✅ **Sync Toggle**: Turn sync on/off for testing
 - ✅ **Modern UI**: Beautiful gradient design with smooth animations
 
-## PowerSync Features
+## IndexedDB Features
 
 ### 🔄 **Offline-First Architecture**
-- All data is stored locally in SQLite via PowerSync
+- All data is stored locally in IndexedDB
 - App works completely offline
 - Changes are queued and synced when online
 
 ### ⚡ **Real-Time Synchronization**
 - Automatic sync when online
 - Manual sync button for immediate sync
-- Conflict resolution handled by PowerSync
+- Smart duplicate prevention logic
 
 ### 🎛️ **Sync Controls**
-- Toggle PowerSync on/off
+- Toggle sync on/off
 - Online/offline status indicator
 - Manual sync button when online
 
 ## Components
 
 ### UserList
-- Displays users from PowerSync local database
+- Displays users from IndexedDB local database
 - Edit and delete actions for each user
 - Loading states and error handling
 - Empty state when no users exist
@@ -47,21 +47,21 @@ A React application for managing users with name and age fields, featuring **Pow
 
 ### SyncToggle
 - Online/offline status indicator
-- PowerSync enable/disable toggle
+- Sync enable/disable toggle
 - Manual sync button
 - Real-time status updates
 
-## PowerSync Integration
+## IndexedDB Integration
 
-The app uses PowerSync for:
-- **Local SQLite Database**: All data stored locally
+The app uses IndexedDB for:
+- **Local IndexedDB Database**: All data stored locally
 - **Offline Operations**: Full functionality without internet
 - **Automatic Sync**: Changes sync when online
-- **Conflict Resolution**: Handled by PowerSync engine
+- **Smart Sync Logic**: Custom duplicate prevention
 
 ### Current Configuration
-- **Development Mode**: PowerSync configured but not connected to real instance
-- **Local Storage**: Uses SQLite database for offline operations
+- **Development Mode**: IndexedDB configured for local storage
+- **Local Storage**: Uses IndexedDB database for offline operations
 - **Backend Sync**: Attempts to sync with Express backend when online
 
 ## Setup
@@ -96,9 +96,9 @@ The app uses PowerSync for:
 6. Watch data sync automatically
 
 ### Method 2: Sync Toggle
-1. Use the PowerSync toggle to disable sync
-2. Make changes (they're stored locally)
-3. Re-enable PowerSync
+1. Use the Sync toggle to disable sync
+2. Make changes (they're stored locally in IndexedDB)
+3. Re-enable Sync
 4. Click "Sync Now" to sync changes
 
 ### Method 3: Disconnect Internet
@@ -116,7 +116,7 @@ The app connects to the backend API at `http://localhost:5000/api`:
 - `PUT /users/:id` - Update user
 - `DELETE /users/:id` - Delete user
 
-## PowerSync Schema
+## IndexedDB Schema
 
 ```javascript
 {
@@ -154,24 +154,24 @@ The app connects to the backend API at `http://localhost:5000/api`:
 3. User is soft-deleted locally and synced when online
 
 ### Sync Controls
-1. **PowerSync Toggle**: Enable/disable real-time sync
+1. **Sync Toggle**: Enable/disable real-time sync
 2. **Sync Now Button**: Manually trigger sync when online
 3. **Status Indicator**: Shows online/offline status
 
 ## Development vs Production
 
 ### Development Mode (Current)
-- PowerSync configured but not connected to real instance
-- Uses local SQLite database
+- IndexedDB configured for local storage
+- Uses local IndexedDB database
 - Attempts backend sync when online
 - Perfect for testing offline functionality
 
 ### Production Mode
-To enable full PowerSync:
-1. Set up a PowerSync instance
-2. Update `REACT_APP_POWERSYNC_URL` in `.env`
-3. Uncomment the connection line in `src/powersync/database.js`
-4. Configure backend PowerSync endpoints
+To enable full production sync:
+1. Set up a production MongoDB instance
+2. Update sync configuration in `.env`
+3. Configure production sync endpoints
+4. Configure backend production endpoints
 
 ## File Structure
 
@@ -182,13 +182,13 @@ src/
 │   ├── UserList.css         # User list styles
 │   ├── UserForm.js          # User form component
 │   ├── UserForm.css         # User form styles
-│   ├── SyncToggle.js        # PowerSync controls
+│   ├── SyncToggle.js        # Sync controls
 │   └── SyncToggle.css       # Sync toggle styles
-├── powersync/
-│   ├── database.js          # PowerSync configuration
+├── database/
+│   ├── database.js          # IndexedDB configuration
 │   └── schema.js            # Database schema
 ├── services/
-│   └── api.js               # API service with PowerSync
+│   └── api.js               # API service with sync logic
 ├── App.js                   # Main app component
 ├── App.css                  # Main app styles
 └── index.js                 # App entry point
@@ -196,15 +196,15 @@ src/
 
 ## Troubleshooting
 
-### PowerSync Issues
-- Check console logs for PowerSync messages
-- Ensure PowerSync instance URL is correct
-- Verify backend PowerSync endpoints are working
+### Sync Issues
+- Check console logs for sync messages
+- Ensure backend endpoints are working
+- Verify IndexedDB is properly initialized
 
 ### Offline Testing
 - Use browser DevTools Network tab
 - Check "Offline" to simulate no internet
-- Verify data persists in local SQLite database
+- Verify data persists in local IndexedDB database
 
 ### Sync Issues
 - Check online/offline status indicator
@@ -213,7 +213,7 @@ src/
 
 ## Future Enhancements
 
-- Real PowerSync instance integration
+- Real production sync integration
 - Advanced conflict resolution
 - Multi-device synchronization
 - Data encryption
