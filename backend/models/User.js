@@ -20,13 +20,13 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  // PowerSync fields
-  powersync_id: {
+  // Sync fields for local storage synchronization
+  sync_id: {
     type: String,
     unique: true,
     sparse: true
   },
-  powersync_version: {
+  sync_version: {
     type: Number,
     default: 1
   }

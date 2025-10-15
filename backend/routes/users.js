@@ -106,8 +106,8 @@ router.post('/sync/bulk', async (req, res) => {
       try {
         const { id, name, age, createdAt, updatedAt } = userData;
         
-        // Check if user exists in MongoDB by powersync_id
-        const existingUser = await User.findOne({ powersync_id: id });
+        // Check if user exists in MongoDB by sync_id
+        const existingUser = await User.findOne({ sync_id: id });
         
         if (existingUser) {
           // Update existing user
@@ -115,7 +115,7 @@ router.post('/sync/bulk', async (req, res) => {
             name, 
             age, 
             updatedAt: new Date(updatedAt),
-            powersync_version: (existingUser.powersync_version || 1) + 1
+            sync_version: (existingUser.sync_version || 1) + 1
           });
           results.updated++;
         } else {
@@ -124,29 +124,29 @@ router.post('/sync/bulk', async (req, res) => {
             name: name, 
             age: age,
             $or: [
-              { powersync_id: { $exists: false } },
-              { powersync_id: null }
+              { sync_id: { $exists: false } },
+              { sync_id: null }
             ]
           });
           
           if (duplicateByName) {
-            // Update the existing user with powersync_id instead of creating new one
+            // Update the existing user with sync_id instead of creating new one
             await User.findByIdAndUpdate(duplicateByName._id, {
-              powersync_id: id,
+              sync_id: id,
               updatedAt: new Date(updatedAt),
-              powersync_version: 1
+              sync_version: 1
             });
             results.updated++;
-            console.log(`Updated existing user ${name} with powersync_id ${id}`);
+            console.log(`Updated existing user ${name} with sync_id ${id}`);
           } else {
-            // Create new user with powersync_id
+            // Create new user with sync_id
             const newUser = new User({
               name,
               age,
-              powersync_id: id,
+              sync_id: id,
               createdAt: new Date(createdAt),
               updatedAt: new Date(updatedAt),
-              powersync_version: 1
+              sync_version: 1
             });
             await newUser.save();
             results.created++;

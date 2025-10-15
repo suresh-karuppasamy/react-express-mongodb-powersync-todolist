@@ -158,9 +158,9 @@ export const userAPI = {
       const mongoResponse = await api.get('/users');
       const mongoUsers = mongoResponse.data;
       
-      // Filter out users that have custom powersync_id (not MongoDB ObjectIds)
+      // Filter out users that have custom sync_id (not MongoDB ObjectIds)
       const customSyncIds = mongoUsers
-        .map(user => user.powersync_id)
+        .map(user => user.sync_id)
         .filter(id => id && id.startsWith('user_')) // Only custom IDs start with 'user_'
         .filter(Boolean);
       
@@ -220,16 +220,16 @@ export const userAPI = {
       const mongoResponse = await api.get('/users');
       const mongoUsers = mongoResponse.data;
       
-      // Filter out users that have custom powersync_id (not MongoDB ObjectIds)
+      // Filter out users that have custom sync_id (not MongoDB ObjectIds)
       const customSyncIds = mongoUsers
-        .map(user => user.powersync_id)
+        .map(user => user.sync_id)
         .filter(id => id && id.startsWith('user_')) // Only custom IDs start with 'user_'
         .filter(Boolean);
       
       const existingSyncIds = new Set(customSyncIds);
       
-      console.log('Existing MongoDB users with custom powersync_id:', existingSyncIds.size);
-      console.log('Custom powersync_ids:', Array.from(existingSyncIds));
+      console.log('Existing MongoDB users with custom sync_id:', existingSyncIds.size);
+      console.log('Custom sync_ids:', Array.from(existingSyncIds));
       
       // Get all local users
       const localUsers = await databaseHelpers.getAllUsers();
@@ -246,7 +246,7 @@ export const userAPI = {
       
       console.log(`Found ${newLocalUsers.length} new local users to sync (out of ${localUsers.length} total)`);
       console.log('Local user IDs:', localUsers.map(u => u.id));
-      console.log('Existing MongoDB powersync_ids:', Array.from(existingSyncIds));
+      console.log('Existing MongoDB sync_ids:', Array.from(existingSyncIds));
       console.log('New local users to sync:', newLocalUsers.map(u => ({id: u.id, name: u.name})));
       
       if (newLocalUsers.length === 0) {
@@ -287,9 +287,9 @@ export const userAPI = {
           const mongoResponse = await api.get('/users');
           const mongoUsers = mongoResponse.data;
           
-          // Filter out users that have custom powersync_id (not MongoDB ObjectIds)
+          // Filter out users that have custom sync_id (not MongoDB ObjectIds)
           const customSyncIds = mongoUsers
-            .map(user => user.powersync_id)
+            .map(user => user.sync_id)
             .filter(id => id && id.startsWith('user_')) // Only custom IDs start with 'user_'
             .filter(Boolean);
           
