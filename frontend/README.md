@@ -74,7 +74,6 @@ The app uses IndexedDB for:
 2. **Configure environment variables in `.env`:**
    ```
    REACT_APP_API_URL=http://localhost:5000/api
-   REACT_APP_POWERSYNC_URL=wss://your-powersync-instance.com
    ```
 
 3. **Start the development server:**

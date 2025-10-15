@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# React Express MongoDB PowerSync TodoList - Development Script
+# React Express MongoDB IndexedDB TodoList - Development Script
 # This script provides development utilities
 
-echo "🛠️  React Express MongoDB PowerSync TodoList - Development Tools"
+echo "🛠️  React Express MongoDB IndexedDB TodoList - Development Tools"
 echo ""
 
 # Colors for output

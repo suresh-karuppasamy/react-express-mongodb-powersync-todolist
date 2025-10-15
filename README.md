@@ -75,7 +75,7 @@ brew services start mongodb/brew/mongodb-community
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
-cd react-express-mongodb-powersync-todolist
+cd react-express-mongodb-indexeddb-todolist
 ```
 
 ### 2. Install Dependencies
@@ -315,7 +315,7 @@ curl -X POST http://localhost:5000/api/users/sync/cleanup
 ## 📁 Project Structure
 
 ```
-react-express-mongodb-powersync-todolist/
+react-express-mongodb-indexeddb-todolist/
 ├── backend/                 # Express.js backend
 │   ├── config/             # Database configuration
 │   ├── middleware/          # Express middleware

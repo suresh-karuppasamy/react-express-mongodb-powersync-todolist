@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# React Express MongoDB PowerSync TodoList - Stop Script
+# React Express MongoDB IndexedDB TodoList - Stop Script
 # This script stops both the backend and frontend servers
 
-echo "🛑 Stopping React Express MongoDB PowerSync TodoList Application..."
+echo "🛑 Stopping React Express MongoDB IndexedDB TodoList Application..."
 
 # Colors for output
 RED='\033[0;31m'

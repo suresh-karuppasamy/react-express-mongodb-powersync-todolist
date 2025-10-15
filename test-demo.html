@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowerSync User Management Demo</title>
+    <title>IndexedDB User Management Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,17 +45,17 @@
     </style>
 </head>
 <body>
-    <h1>🔄 PowerSync User Management System</h1>
+    <h1>🔄 IndexedDB User Management System</h1>
     
     <div class="demo-section">
         <h2>✨ Features Implemented</h2>
         
         <div class="feature">
-            <h3>🔄 PowerSync Toggle</h3>
+            <h3>🔄 Sync Toggle</h3>
             <p>Toggle between local storage (IndexedDB) and MongoDB sync:</p>
             <ul>
-                <li><span class="status on">PowerSync ON</span> - Users saved to both IndexedDB and MongoDB</li>
-                <li><span class="status off">PowerSync OFF</span> - Users saved to IndexedDB only</li>
+                <li><span class="status on">Sync ON</span> - Users saved to both IndexedDB and MongoDB</li>
+                <li><span class="status off">Sync OFF</span> - Users saved to IndexedDB only</li>
             </ul>
         </div>
 
@@ -76,7 +76,7 @@
             <ul>
                 <li><strong>IndexedDB</strong> - Local browser storage for offline capability</li>
                 <li><strong>MongoDB</strong> - Cloud database for data persistence</li>
-                <li><strong>Auto-sync</strong> - Syncs when PowerSync is enabled and online</li>
+                <li><strong>Auto-sync</strong> - Syncs when Sync is enabled and online</li>
             </ul>
         </div>
 
@@ -107,9 +107,9 @@
         </div>
 
         <div class="feature">
-            <h3>2. Test PowerSync ON</h3>
+            <h3>2. Test Sync ON</h3>
             <ol>
-                <li>Ensure PowerSync toggle is <span class="status on">ON</span></li>
+                <li>Ensure Sync toggle is <span class="status on">ON</span></li>
                 <li>Create a new user - will save to both IndexedDB and MongoDB</li>
                 <li>Check user list - should show "MongoDB + Local" badge</li>
                 <li>Refresh page - user should persist (from MongoDB)</li>
@@ -117,9 +117,9 @@
         </div>
 
         <div class="feature">
-            <h3>3. Test PowerSync OFF</h3>
+            <h3>3. Test Sync OFF</h3>
             <ol>
-                <li>Toggle PowerSync to <span class="status off">OFF</span></li>
+                <li>Toggle Sync to <span class="status off">OFF</span></li>
                 <li>Create a new user - will save to IndexedDB only</li>
                 <li>Check user list - should show "Local Only" badge</li>
                 <li>Refresh page - user should persist (from IndexedDB)</li>
@@ -132,7 +132,7 @@
                 <li>Disconnect internet</li>
                 <li>Create/edit users - will save to IndexedDB only</li>
                 <li>Reconnect internet</li>
-                <li>Toggle PowerSync ON and click "Sync Now"</li>
+                <li>Toggle Sync ON and click "Sync Now"</li>
                 <li>All local changes will sync to MongoDB</li>
             </ol>
         </div>
@@ -147,7 +147,7 @@
                 <li><strong>React Components</strong> - UserForm, UserList, SyncToggle</li>
                 <li><strong>IndexedDB</strong> - Local storage using browser APIs</li>
                 <li><strong>API Service</strong> - Handles sync logic and storage switching</li>
-                <li><strong>PowerSync Helpers</strong> - Database operations abstraction</li>
+                <li><strong>Sync Helpers</strong> - Database operations abstraction</li>
             </ul>
         </div>
 

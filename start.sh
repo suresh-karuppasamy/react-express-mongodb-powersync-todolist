@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# React Express MongoDB PowerSync TodoList - Start Script
+# React Express MongoDB IndexedDB TodoList - Start Script
 # This script starts both the backend and frontend servers
 
-echo "🚀 Starting React Express MongoDB PowerSync TodoList Application..."
+echo "🚀 Starting React Express MongoDB IndexedDB TodoList Application..."
 
 # Colors for output
 RED='\033[0;31m'
