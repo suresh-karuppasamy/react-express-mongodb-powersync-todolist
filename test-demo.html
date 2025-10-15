@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerSync User Management Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .demo-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .feature {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .code {
+            background: #f1f3f4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.on { background: #d4edda; color: #155724; }
+        .status.off { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>🔄 PowerSync User Management System</h1>
+    
+    <div class="demo-section">
+        <h2>✨ Features Implemented</h2>
+        
+        <div class="feature">
+            <h3>🔄 PowerSync Toggle</h3>
+            <p>Toggle between local storage (IndexedDB) and MongoDB sync:</p>
+            <ul>
+                <li><span class="status on">PowerSync ON</span> - Users saved to both IndexedDB and MongoDB</li>
+                <li><span class="status off">PowerSync OFF</span> - Users saved to IndexedDB only</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>👥 User Management</h3>
+            <p>Complete CRUD operations with sync awareness:</p>
+            <ul>
+                <li>Create users with sync status indicator</li>
+                <li>List users with storage type badges</li>
+                <li>Edit users with sync status</li>
+                <li>Delete users with sync status</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>💾 Storage System</h3>
+            <p>Intelligent storage switching:</p>
+            <ul>
+                <li><strong>IndexedDB</strong> - Local browser storage for offline capability</li>
+                <li><strong>MongoDB</strong> - Cloud database for data persistence</li>
+                <li><strong>Auto-sync</strong> - Syncs when PowerSync is enabled and online</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>📊 Sync Status</h3>
+            <p>Real-time sync information:</p>
+            <ul>
+                <li>Local storage user count</li>
+                <li>MongoDB user count</li>
+                <li>Connection status</li>
+                <li>Last sync time</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🚀 How to Test</h2>
+        
+        <div class="feature">
+            <h3>1. Start the Application</h3>
+            <div class="code">
+                # Backend (Terminal 1)
+                cd backend && npm start
+                
+                # Frontend (Terminal 2)  
+                cd frontend && npm start
+            </div>
+        </div>
+
+        <div class="feature">
+            <h3>2. Test PowerSync ON</h3>
+            <ol>
+                <li>Ensure PowerSync toggle is <span class="status on">ON</span></li>
+                <li>Create a new user - will save to both IndexedDB and MongoDB</li>
+                <li>Check user list - should show "MongoDB + Local" badge</li>
+                <li>Refresh page - user should persist (from MongoDB)</li>
+            </ol>
+        </div>
+
+        <div class="feature">
+            <h3>3. Test PowerSync OFF</h3>
+            <ol>
+                <li>Toggle PowerSync to <span class="status off">OFF</span></li>
+                <li>Create a new user - will save to IndexedDB only</li>
+                <li>Check user list - should show "Local Only" badge</li>
+                <li>Refresh page - user should persist (from IndexedDB)</li>
+            </ol>
+        </div>
+
+        <div class="feature">
+            <h3>4. Test Offline Mode</h3>
+            <ol>
+                <li>Disconnect internet</li>
+                <li>Create/edit users - will save to IndexedDB only</li>
+                <li>Reconnect internet</li>
+                <li>Toggle PowerSync ON and click "Sync Now"</li>
+                <li>All local changes will sync to MongoDB</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🔧 Technical Implementation</h2>
+        
+        <div class="feature">
+            <h3>Frontend Architecture</h3>
+            <ul>
+                <li><strong>React Components</strong> - UserForm, UserList, SyncToggle</li>
+                <li><strong>IndexedDB</strong> - Local storage using browser APIs</li>
+                <li><strong>API Service</strong> - Handles sync logic and storage switching</li>
+                <li><strong>PowerSync Helpers</strong> - Database operations abstraction</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>Backend Architecture</h3>
+            <ul>
+                <li><strong>Express.js</strong> - REST API server</li>
+                <li><strong>MongoDB</strong> - Cloud database with Mongoose ODM</li>
+                <li><strong>Sync Status Endpoint</strong> - Provides sync information</li>
+                <li><strong>CORS Enabled</strong> - Allows frontend communication</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>📱 Access the Application</h2>
+        <p>Open your browser and navigate to:</p>
+        <div class="code">
+            http://localhost:3000
+        </div>
+        <p><strong>Note:</strong> Make sure both backend (port 5000) and frontend (port 3000) servers are running.</p>
+    </div>
+</body>
+</html>
